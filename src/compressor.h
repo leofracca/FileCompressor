@@ -7,7 +7,7 @@ namespace file_compressor
 class Compressor
 {
 public:
-    Compressor(const std::string& inputFilePath);
+    explicit Compressor(const std::string& inputFilePath);
 
 private:
     void buildFrequencyTable();
