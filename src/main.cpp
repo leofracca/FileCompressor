@@ -8,6 +8,7 @@ int main()
     file_compressor::Compressor compressor(inputFilePath);
 
     compressor.compress();
+    compressor.decompress();
 
     return 0;
 }

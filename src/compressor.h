@@ -11,6 +11,7 @@ class Compressor
 public:
     explicit Compressor(const std::string& inputFilePath);
     void compress();
+    void decompress();
 
 private:
     void buildFrequencyTable();
