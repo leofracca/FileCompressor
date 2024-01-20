@@ -20,36 +20,10 @@ void Compressor::compress()
     std::ifstream file(inputFilePath);
     std::ofstream outputFile("output.txt", std::ios::binary);
 
-    // Write the encoding table to the output file
-    std::string header;
-    for (auto& pair : encodingTable)
-    {
-        header += "(" + std::string(1, pair.first) + pair.second + ")";
-    }
-    outputFile << header.size() << '\n' << header;
+    writeEncodingTableToFile(outputFile);
+    const std::string encoding = buildEncodingString(file);
+    writeEncodingStringToFile(outputFile, encoding);
 
-    // Read the input file to build the encoding
-    std::string encoding;
-    char c;
-    while (file.get(c))
-    {
-        encoding += encodingTable[c];
-    }
-
-    // Pad the encoding with 0s until it is a multiple of 8
-    while (encoding.size() % 8 != 0)
-    {
-        encoding += "0";
-    }
-
-    // Write the encoded file to the output file as bytes
-    for (int i = 0; i < encoding.size(); i += 8)
-    {
-        std::string byte = encoding.substr(i, 8);
-        outputFile << static_cast<char>(std::stoi(byte, nullptr, 2));
-    }
-
-    // Close the files
     file.close();
     outputFile.close();
 }
@@ -59,75 +33,12 @@ void Compressor::decompress()
     std::ifstream file("output.txt", std::ios::binary);
     std::ofstream outputFile("decompressed.txt");
 
-    // Read the header
-    // TODO: Move the header reading to a separate function
-    // TODO: Try to not insert parentheses in the encoding table string
-    int headerSize;
-    file >> headerSize;
+    const std::string encodingTableString = readEncodingTableStringFromFile(file);
+    const auto decodingTable = buildEncodingTable(encodingTableString);
+    const std::string encoded = readEncodedFile(file);
+    const std::string decoded = decodeFile(encoded, decodingTable);
+    writeDecodedToFile(outputFile, decoded);
 
-    std::string encodingTableString;
-    char c;
-    for (int i = 0; i < headerSize; i++)
-    {
-        file.get(c);
-        if (c == '(')
-        {
-            encodingTableString += c;
-            while (file.get(c) && c != ')')
-            {
-                i++;
-                encodingTableString += c;
-            }
-        }
-        encodingTableString += c;
-    }
-
-    // Build the encoding table from the encoding table string
-    std::unordered_map<std::string, char> decodingTable;
-    char character;
-    std::string encoding;
-    for (int i = 0; i < encodingTableString.size(); i++)
-    {
-        if (encodingTableString[i] == '(')
-        {
-            character = encodingTableString[i + 1];
-            encoding = "";
-            i++;
-        }
-        else if (encodingTableString[i] == ')')
-        {
-            decodingTable[encoding] = character;
-        }
-        else
-        {
-            encoding += encodingTableString[i];
-        }
-    }
-
-    // Read the encoded file from the output file
-    std::string encodedFile;
-    while (file.get(c))
-    {
-        encodedFile += std::bitset<8>(c).to_string();
-    }
-
-    // Decode the encoded file
-    std::string decodedFile;
-    std::string currentEncoding;
-    for (char ch : encodedFile)
-    {
-        currentEncoding += ch;
-        if (decodingTable.find(currentEncoding) != decodingTable.end())
-        {
-            decodedFile += decodingTable[currentEncoding];
-            currentEncoding = "";
-        }
-    }
-
-    // Write the decoded file to the output file
-    outputFile << decodedFile;
-
-    // Close the files
     file.close();
     outputFile.close();
 }
@@ -142,18 +53,14 @@ void Compressor::buildFrequencyTable()
         frequencyTable[c]++;
     }
 
-    /*
-    for (auto& pair : frequencyTable)
-    {
-        std::cout << pair.first << ": " << pair.second << std::endl;
-    }
-    */
+    // printFrequencyTable();
+
     file.close();
 }
 
 void Compressor::printFrequencyTable()
 {
-    for (auto& pair : frequencyTable)
+    for (const auto& pair : frequencyTable)
     {
         std::cout << pair.first << ": " << pair.second << std::endl;
     }
@@ -217,5 +124,131 @@ void Compressor::buildEncodingTableHelper(HuffmanNode* node, std::string encodin
 
     buildEncodingTableHelper(node->getLeft(), encoding + "0");
     buildEncodingTableHelper(node->getRight(), encoding + "1");
+}
+
+void Compressor::writeEncodingTableToFile(std::ofstream& outputFile)
+{
+    std::string header;
+    for (auto &pair: encodingTable)
+    {
+        header += "(" + std::string(1, pair.first) + pair.second + ")";
+    }
+    outputFile << header.size() << '\n' << header;
+}
+
+std::string Compressor::buildEncodingString(std::ifstream &inputFile)
+{
+    std::string encoding;
+    char c;
+    while (inputFile.get(c))
+    {
+        encoding += encodingTable[c];
+    }
+
+    // Pad the encoding with 0s until it is a multiple of 8
+    while (encoding.size() % 8 != 0)
+    {
+        encoding += "0";
+    }
+
+    return encoding;
+}
+
+void Compressor::writeEncodingStringToFile(std::ofstream& outputFile, const std::string& encoding)
+{
+    for (int i = 0; i < encoding.size(); i += 8)
+    {
+        std::string byte = encoding.substr(i, 8);
+        outputFile << static_cast<char>(std::stoi(byte, nullptr, 2));
+    }
+}
+
+std::string Compressor::readEncodingTableStringFromFile(std::ifstream& inputFile)
+{
+    int headerSize;
+    inputFile >> headerSize;
+
+    std::string encodingTableString;
+    char c;
+    for (int i = 0; i < headerSize; i++)
+    {
+        inputFile.get(c);
+        if (c == '(')
+        {
+            encodingTableString += c;
+            while (inputFile.get(c))
+            {
+                i++;
+                encodingTableString += c;
+                if (c == ')')
+                {
+                    break;
+                }
+            }
+        }
+        encodingTableString += c;
+    }
+
+    return encodingTableString;
+}
+
+std::unordered_map<std::string, char> Compressor::buildEncodingTable(const std::string& encodingTableString)
+{
+    std::unordered_map<std::string, char> decodingTable;
+    char character;
+    std::string encoding;
+    for (int i = 0; i < encodingTableString.size(); i++)
+    {
+        if (encodingTableString[i] == '(')
+        {
+            character = encodingTableString[i + 1];
+            encoding = "";
+            i++;
+        }
+        else if (encodingTableString[i] == ')')
+        {
+            decodingTable[encoding] = character;
+        }
+        else
+        {
+            encoding += encodingTableString[i];
+        }
+    }
+
+    return decodingTable;
+}
+
+std::string Compressor::readEncodedFile(std::ifstream &inputFile)
+{
+    std::string encodedFile;
+    char c;
+    while (inputFile.get(c))
+    {
+        encodedFile += std::bitset<8>(c).to_string();
+    }
+
+    return encodedFile;
+}
+
+std::string Compressor::decodeFile(const std::string &encoded, const std::unordered_map<std::string, char> &decodingTable)
+{
+    std::string decoded;
+    std::string currentEncoding;
+    for (char c : encoded)
+    {
+        currentEncoding += c;
+        if (decodingTable.find(currentEncoding) != decodingTable.end())
+        {
+            decoded += decodingTable.at(currentEncoding);
+            currentEncoding = "";
+        }
+    }
+
+    return decoded;
+}
+
+void Compressor::writeDecodedToFile(std::ofstream &outputFile, const std::string &decoded)
+{
+    outputFile << decoded;
 }
 } // namespace file_compressor
