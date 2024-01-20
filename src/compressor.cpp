@@ -73,14 +73,10 @@ void Compressor::decompress()
         if (c == '(')
         {
             encodingTableString += c;
-            while (file.get(c))
+            while (file.get(c) && c != ')')
             {
                 i++;
                 encodingTableString += c;
-                if (c == ')')
-                {
-                    break;
-                }
             }
         }
         encodingTableString += c;
