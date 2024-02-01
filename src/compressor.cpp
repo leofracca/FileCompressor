@@ -6,8 +6,9 @@
 
 namespace file_compressor
 {
-Compressor::Compressor(const std::string& inputFilePath)
+Compressor::Compressor(const std::string& inputFilePath, const std::string& outputFilePath)
     : inputFilePath(inputFilePath)
+    , outputFilePath(outputFilePath)
 {
     buildFrequencyTable();
     // printFrequencyTable();
@@ -18,7 +19,7 @@ Compressor::Compressor(const std::string& inputFilePath)
 void Compressor::compress()
 {
     std::ifstream file(inputFilePath);
-    std::ofstream outputFile("output.txt", std::ios::binary);
+    std::ofstream outputFile(outputFilePath, std::ios::binary);
 
     writeEncodingTableToFile(outputFile);
     const std::string encoding = buildEncodingString(file);
@@ -30,8 +31,8 @@ void Compressor::compress()
 
 void Compressor::decompress()
 {
-    std::ifstream file("output.txt", std::ios::binary);
-    std::ofstream outputFile("decompressed.txt");
+    std::ifstream file(inputFilePath, std::ios::binary);
+    std::ofstream outputFile(outputFilePath);
 
     const std::string encodingTableString = readEncodingTableStringFromFile(file);
     const auto decodingTable = buildEncodingTable(encodingTableString);

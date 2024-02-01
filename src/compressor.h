@@ -9,9 +9,9 @@ namespace file_compressor
 class Compressor
 {
 public:
-    explicit Compressor(const std::string& inputFilePath);
+    explicit Compressor(const std::string& inputFilePath, const std::string& outputFilePath);
     void compress();
-    static void decompress();
+    void decompress();
 
 private:
     void buildFrequencyTable();
@@ -33,6 +33,7 @@ private:
 
 private:
     std::string inputFilePath;
+    std::string outputFilePath;
     std::unordered_map<char, int> frequencyTable;
     HuffmanNode* huffmanTreeRoot{};
     std::unordered_map<char, std::string> encodingTable;

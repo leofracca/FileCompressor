@@ -9,6 +9,7 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
 file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS src/*.h)
 
 target_sources(fileCompressor PRIVATE ${SOURCES} ${HEADERS})
+target_sources(fileCompressor PRIVATE ${PROJECT_SOURCE_DIR}/utils/arguments.cpp ${PROJECT_SOURCE_DIR}/utils/arguments.h)
 
 target_include_directories(fileCompressor PRIVATE src)
 target_include_directories(fileCompressor PRIVATE utils)

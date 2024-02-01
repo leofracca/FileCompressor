@@ -15,10 +15,12 @@ int main(int argc, char *argv[])
     bool compress = vm.value().count("compress") > 0;
     bool decompress = vm.value().count("decompress") > 0;
 
-    file_compressor::Compressor compressor(inputFilePath);
+    file_compressor::Compressor compressor(inputFilePath, outputFilePath);
 
-    compressor.compress();
-    compressor.decompress();
+    if (compress)
+        compressor.compress();
+    else if (decompress)
+        compressor.decompress();
 
     return 0;
 }
