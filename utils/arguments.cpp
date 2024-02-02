@@ -14,7 +14,7 @@ std::optional<boost::program_options::variables_map> handleArguments(int argc, c
     desc.add_options()
         ("help,h", "produce this help message")
         ("input,i", po::value<std::string>(), "path to input file")
-        ("output,o", po::value<std::string>(), "path to output file")
+        ("output,o", po::value<std::string>(), "path to output file (default: input file name with .compressed extension)")
         ("compress,c", "compress the input file")
         ("decompress,d", "decompress the input file")
     ;
