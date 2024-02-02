@@ -17,5 +17,3 @@ target_include_directories(fileCompressor PRIVATE utils)
 # Boost
 find_package(Boost REQUIRED COMPONENTS program_options)
 target_link_libraries(fileCompressor PRIVATE Boost::program_options)
-
-

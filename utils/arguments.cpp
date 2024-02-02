@@ -41,8 +41,7 @@ std::optional<boost::program_options::variables_map> handleArguments(int argc, c
 
     if (vm.count("output") == 0)
     {
-        std::cout << "Output file was not set.\n";
-        return std::nullopt;
+        vm.insert({"output", po::variable_value(std::string(vm["input"].as<std::string>() + ".compressed"), false)});
     }
 
     if (vm.count("compress") == 0 && vm.count("decompress") == 0)

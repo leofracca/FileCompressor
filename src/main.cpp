@@ -5,7 +5,6 @@
 
 int main(int argc, char *argv[])
 {
-    // std::string inputFilePath = "input.txt";
     auto vm = arguments::handleArguments(argc, argv);
     if (!vm)
         return 0;
