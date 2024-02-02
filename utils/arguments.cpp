@@ -41,7 +41,14 @@ std::optional<boost::program_options::variables_map> handleArguments(int argc, c
 
     if (vm.count("output") == 0)
     {
-        vm.insert({"output", po::variable_value(std::string(vm["input"].as<std::string>() + ".compressed"), false)});
+        std::string inputFilePath = std::string(vm["input"].as<std::string>());
+
+        if (vm.count("compress") > 0)
+            inputFilePath += ".compressed";
+        else if (vm.count("decompress") > 0)
+            inputFilePath = inputFilePath.substr(0, inputFilePath.size() - std::string(".compressed").size());
+
+        vm.insert({"output", po::variable_value(inputFilePath, false)});
     }
 
     if (vm.count("compress") == 0 && vm.count("decompress") == 0)
