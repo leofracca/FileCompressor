@@ -25,6 +25,11 @@ std::optional<boost::program_options::variables_map> handleArguments(int argc, c
 
     po::variables_map vm;
     po::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
+    if (conflicting_options(vm, "compress", "decompress") == -1)
+    {
+        std::cout << "Conflicting options 'compress' and 'decompress'.\n";
+        return std::nullopt;
+    }
     po::notify(vm);
 
     if (vm.count("help"))
@@ -58,5 +63,13 @@ std::optional<boost::program_options::variables_map> handleArguments(int argc, c
     }
 
     return vm;
+}
+
+int conflicting_options(const boost::program_options::variables_map& vm, const std::string& opt1, const std::string& opt2)
+{
+    if (vm.count(opt1) && !vm[opt1].defaulted() &&
+        vm.count(opt2) && !vm[opt2].defaulted())
+        return -1;
+    return 0;
 }
 } // namespace arguments
