@@ -48,7 +48,7 @@ public:
 
     /**
      * @brief Check if the node is a leaf
-     * @return True if the node is a leaf, false otherwise
+     * @return `true` if the node is a leaf, `false` otherwise
      */
     bool isLeaf() const;
 
