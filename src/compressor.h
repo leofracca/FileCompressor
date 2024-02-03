@@ -43,6 +43,9 @@ public:
     void decompress();
 
 private:
+    //////////////////////////
+    // Compression functions
+    //////////////////////////
     /**
      * @brief Build the frequency table
      * @details The frequency of each character in the input file will be counted and saved in the frequency table.
@@ -104,6 +107,9 @@ private:
      */
     static void writeEncodingStringToFile(std::ofstream& outputFile, const std::string& encoding);
 
+    //////////////////////////
+    // Decompression functions
+    //////////////////////////
     /**
      * @brief Read the encoding table string from the input file
      * @details The input file must be a compressed file
