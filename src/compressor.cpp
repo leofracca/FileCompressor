@@ -130,9 +130,9 @@ void Compressor::buildEncodingTableHelper(HuffmanNode* node, std::string encodin
 void Compressor::writeEncodingTableToFile(std::ofstream& outputFile)
 {
     std::string header;
-    for (auto &pair: encodingTable)
+    for (const auto &[k, v]: encodingTable)
     {
-        header += "(" + std::string(1, pair.first) + pair.second + ")";
+        header += "(" + std::string(1, k) + v + ")";
     }
     outputFile << header.size() << '\n' << header;
 }
