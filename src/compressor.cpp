@@ -11,7 +11,6 @@ Compressor::Compressor(const std::string& inputFilePath, const std::string& outp
     , outputFilePath(outputFilePath)
 {
     buildFrequencyTable();
-    // printFrequencyTable();
     buildHuffmanTree();
     buildEncodingTable();
 }
@@ -112,13 +111,8 @@ void Compressor::buildEncodingTable()
 
 void Compressor::buildEncodingTableHelper(HuffmanNode* node, std::string encoding)
 {
-    // Visit the tree
-    // If left, add 0 to encoding
-    // If right, add 1 to encoding
-    // If leaf, add character and encoding to encoding table
     if (node->isLeaf())
     {
-        //std::cout << node->getCharacter() << ": " << encoding << std::endl;
         encodingTable[node->getCharacter()] = encoding;
         return;
     }
