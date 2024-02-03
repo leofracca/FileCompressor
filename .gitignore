@@ -34,7 +34,7 @@
 # Build folder
 build/
 bin/
-doc/
+docs/
 
 # Clion
 .idea/
