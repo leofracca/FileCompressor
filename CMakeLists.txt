@@ -17,3 +17,17 @@ target_include_directories(fileCompressor PRIVATE utils)
 # Boost
 find_package(Boost REQUIRED COMPONENTS program_options)
 target_link_libraries(fileCompressor PRIVATE Boost::program_options)
+
+# Doxygen
+find_package(Doxygen)
+if (DOXYGEN_FOUND)
+    file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/docs)
+
+    add_custom_target(docs
+            COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_SOURCE_DIR}/Doxyfile
+            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+    )
+else (DOXYGEN_FOUND)
+    message("Doxygen need to be installed to generate the doxygen documentation")
+endif (DOXYGEN_FOUND)
