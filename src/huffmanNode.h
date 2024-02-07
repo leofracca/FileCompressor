@@ -26,31 +26,31 @@ public:
      * @brief Get the character of the node
      * @return The character
      */
-    char getCharacter() const;
+    [[nodiscard]] char getCharacter() const;
 
     /**
      * @brief Get the frequency of the character of the node
      * @return The frequency
      */
-    int getFrequency() const;
+    [[nodiscard]] int getFrequency() const;
 
     /**
      * @brief Get the left child of the node
      * @return The left child
      */
-    HuffmanNode* getLeft() const;
+    [[nodiscard]] HuffmanNode* getLeft() const;
 
     /**
      * @brief Get the right child of the node
      * @return The right child
      */
-    HuffmanNode* getRight() const;
+    [[nodiscard]] HuffmanNode* getRight() const;
 
     /**
      * @brief Check if the node is a leaf
      * @return `true` if the node is a leaf, `false` otherwise
      */
-    bool isLeaf() const;
+    [[nodiscard]] bool isLeaf() const;
 
 private:
     char character; ///< The character
