@@ -232,7 +232,7 @@ std::string Compressor::decodeFile(const std::string &encoded, const std::unorde
     for (char c : encoded)
     {
         currentEncoding += c;
-        if (decodingTable.find(currentEncoding) != decodingTable.end())
+        if (decodingTable.contains(currentEncoding))
         {
             decoded += decodingTable.at(currentEncoding);
             currentEncoding = "";

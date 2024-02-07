@@ -123,7 +123,6 @@ private:
      */
     static std::string readEncodingTableStringFromFile(std::ifstream& inputFile);
 
-    // TODO: Try std::unordered_map<char, std::string> instead. Then save the result in encodingTable.
     /**
      * @brief Build the encoding table
      * @details The encoding table will be built based on the encoding table string.
