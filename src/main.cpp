@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "compressor.h"
 #include "arguments.h"
+#include "compressor.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     auto vm = arguments::handleArguments(argc, argv);
     if (!vm)

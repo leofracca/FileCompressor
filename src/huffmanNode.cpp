@@ -3,10 +3,7 @@
 namespace file_compressor
 {
 HuffmanNode::HuffmanNode(char character, int frequency, HuffmanNode* left, HuffmanNode* right)
-    : character(character)
-    , frequency(frequency)
-    , left(left)
-    , right(right)
+    : character(character), frequency(frequency), left(left), right(right)
 {}
 
 char HuffmanNode::getCharacter() const

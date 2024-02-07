@@ -101,7 +101,7 @@ private:
      * @return The encoding string
      * @see buildEncodingTable
      */
-    std::string buildEncodingString(std::ifstream &inputFile);
+    std::string buildEncodingString(std::ifstream& inputFile);
 
     /**
      * @brief Write the encoding string to the output file

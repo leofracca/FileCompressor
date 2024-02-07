@@ -1,14 +1,13 @@
 #include "compressor.h"
 
+#include <bitset>
 #include <fstream>
 #include <queue>
-#include <bitset>
 
 namespace file_compressor
 {
 Compressor::Compressor(const std::string& inputFilePath, const std::string& outputFilePath)
-    : inputFilePath(inputFilePath)
-    , outputFilePath(outputFilePath)
+    : inputFilePath(inputFilePath), outputFilePath(outputFilePath)
 {
     buildFrequencyTable();
     buildHuffmanTree();
@@ -60,7 +59,7 @@ void Compressor::buildFrequencyTable()
 
 [[maybe_unused]] void Compressor::printFrequencyTable()
 {
-    for (const auto& pair : frequencyTable)
+    for (const auto& pair: frequencyTable)
     {
         std::cout << pair.first << ": " << pair.second << std::endl;
     }
@@ -72,7 +71,7 @@ void Compressor::buildHuffmanTree()
     std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, decltype(compare)> priorityQueue(compare);
 
     // Build the priority queue
-    for (auto& pair : frequencyTable)
+    for (auto& pair: frequencyTable)
     {
         //priorityQueue.push(std::make_unique<HuffmanNode>(pair.first, pair.second, nullptr, nullptr).get());
         priorityQueue.push(new HuffmanNode(pair.first, pair.second, nullptr, nullptr));
@@ -124,14 +123,15 @@ void Compressor::buildEncodingTableHelper(HuffmanNode* node, const std::string& 
 void Compressor::writeEncodingTableToFile(std::ofstream& outputFile)
 {
     std::string header;
-    for (const auto &[k, v]: encodingTable)
+    for (const auto& [k, v]: encodingTable)
     {
         header += "(" + std::string(1, k) + v + ")";
     }
-    outputFile << header.size() << '\n' << header;
+    outputFile << header.size() << '\n'
+               << header;
 }
 
-std::string Compressor::buildEncodingString(std::ifstream &inputFile)
+std::string Compressor::buildEncodingString(std::ifstream& inputFile)
 {
     std::string encoding;
     char c;
@@ -213,7 +213,7 @@ std::unordered_map<std::string, char> Compressor::buildEncodingTableFromString(c
     return decodingTable;
 }
 
-std::string Compressor::readEncodedFile(std::ifstream &inputFile)
+std::string Compressor::readEncodedFile(std::ifstream& inputFile)
 {
     std::string encodedFile;
     char c;
@@ -225,11 +225,11 @@ std::string Compressor::readEncodedFile(std::ifstream &inputFile)
     return encodedFile;
 }
 
-std::string Compressor::decodeFile(const std::string &encoded, const std::unordered_map<std::string, char> &decodingTable)
+std::string Compressor::decodeFile(const std::string& encoded, const std::unordered_map<std::string, char>& decodingTable)
 {
     std::string decoded;
     std::string currentEncoding;
-    for (char c : encoded)
+    for (char c: encoded)
     {
         currentEncoding += c;
         if (decodingTable.contains(currentEncoding))
@@ -242,7 +242,7 @@ std::string Compressor::decodeFile(const std::string &encoded, const std::unorde
     return decoded;
 }
 
-void Compressor::writeDecodedToFile(std::ofstream &outputFile, const std::string &decoded)
+void Compressor::writeDecodedToFile(std::ofstream& outputFile, const std::string& decoded)
 {
     outputFile << decoded;
 }

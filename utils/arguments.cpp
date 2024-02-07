@@ -1,16 +1,17 @@
 #include "arguments.h"
 
 #include <boost/program_options.hpp>
-#include <optional>
 #include <iostream>
+#include <optional>
 
 namespace arguments
 {
-std::optional<boost::program_options::variables_map> handleArguments(int argc, char *argv[])
+std::optional<boost::program_options::variables_map> handleArguments(int argc, char* argv[])
 {
     namespace po = boost::program_options;
 
     po::options_description desc("Allowed options");
+    // clang-format off
     desc.add_options()
         ("help,h", "produce this help message")
         ("input,i", po::value<std::string>(), "path to input file")
@@ -18,6 +19,7 @@ std::optional<boost::program_options::variables_map> handleArguments(int argc, c
         ("compress,c", "compress the input file")
         ("decompress,d", "decompress the input file")
     ;
+    // clang-format on
 
     po::positional_options_description p;
     p.add("input", 1);
