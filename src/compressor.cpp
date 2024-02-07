@@ -34,7 +34,7 @@ void Compressor::decompress()
     std::ofstream outputFile(outputFilePath);
 
     const std::string encodingTableString = readEncodingTableStringFromFile(file);
-    const auto decodingTable = buildEncodingTable(encodingTableString);
+    const auto decodingTable = buildEncodingTableFromString(encodingTableString);
     const std::string encoded = readEncodedFile(file);
     const std::string decoded = decodeFile(encoded, decodingTable);
     writeDecodedToFile(outputFile, decoded);
@@ -187,7 +187,7 @@ std::string Compressor::readEncodingTableStringFromFile(std::ifstream& inputFile
     return encodingTableString;
 }
 
-std::unordered_map<std::string, char> Compressor::buildEncodingTable(const std::string& encodingTableString)
+std::unordered_map<std::string, char> Compressor::buildEncodingTableFromString(const std::string& encodingTableString)
 {
     std::unordered_map<std::string, char> decodingTable;
     char character;

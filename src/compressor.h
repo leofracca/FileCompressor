@@ -132,7 +132,7 @@ private:
      * @return The encoding table
      * @see readEncodingTableStringFromFile
      */
-    static std::unordered_map<std::string, char> buildEncodingTable(const std::string& encodingTableString);
+    static std::unordered_map<std::string, char> buildEncodingTableFromString(const std::string& encodingTableString);
 
     /**
      * @brief Read the encoded file from the input file
