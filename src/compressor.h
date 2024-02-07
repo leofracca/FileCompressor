@@ -56,7 +56,7 @@ private:
      * @brief Print the frequency table
      * @note This function is for debugging purposes only.
      */
-    void printFrequencyTable();
+    [[maybe_unused]] void printFrequencyTable();
 
     /**
      * @brief Build the Huffman tree

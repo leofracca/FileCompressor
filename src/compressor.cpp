@@ -58,7 +58,7 @@ void Compressor::buildFrequencyTable()
     file.close();
 }
 
-void Compressor::printFrequencyTable()
+[[maybe_unused]] void Compressor::printFrequencyTable()
 {
     for (const auto& pair : frequencyTable)
     {
