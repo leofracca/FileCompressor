@@ -72,7 +72,6 @@ private:
      */
     void buildEncodingTable();
 
-    // TODO: check if it is possible to pass the encoding string as a const reference
     /**
      * @brief Helper function for building the encoding table
      * @details The tree is visited as follows:
@@ -84,7 +83,7 @@ private:
      * @param encoding The encoding of the current node
      * @note This function is called recursively.
      */
-    void buildEncodingTableHelper(HuffmanNode* node, std::string encoding);
+    void buildEncodingTableHelper(HuffmanNode* node, const std::string& encoding);
 
     /**
      * @brief Write the encoding table to the output file

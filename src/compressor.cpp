@@ -109,7 +109,7 @@ void Compressor::buildEncodingTable()
     buildEncodingTableHelper(huffmanTreeRoot, "");
 }
 
-void Compressor::buildEncodingTableHelper(HuffmanNode* node, std::string encoding)
+void Compressor::buildEncodingTableHelper(HuffmanNode* node, const std::string& encoding)
 {
     if (node->isLeaf())
     {
